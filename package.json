@@ -1,0 +1,22 @@
+{
+  "name": "crud-challenge",
+  "version": "1.0.0",
+  "description": "codingapple\r -node.js -mongodb -express",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xian11/crud-challenge.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xian11/crud-challenge/issues"
+  },
+  "homepage": "https://github.com/xian11/crud-challenge#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
