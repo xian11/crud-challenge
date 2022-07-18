@@ -16,7 +16,7 @@ MongoClient.connect('mongodb+srv://bohyun:chlqhbo3278@boilerplate.kfozn.mongodb.
     app.listen('8080', function(){
       console.log('listening on 8080')
     });
-  })
+  });
 
 app.get('/', function(req,res){
     // res.send('하이');
@@ -35,7 +35,7 @@ app.post('/add', function(req,res){
             res.send('저장이 완료되었습니다');
             db.collection('counter').updateOne({ name : "post_count" },{ $inc : {totalPost:1} }, function(err,result){
                 if(err) return console.log(err);
-            })
+            });
         });
 
     });
@@ -46,3 +46,11 @@ app.get('/list', function(req,res){
         res.render('list.ejs', { posts : result });
     });
 })
+
+app.delete('/delete', function(req,res){
+    req.body._id = parseInt(req.body._id);
+    db.collection('post').deleteOne(req.body, function(err,result){
+        console.log('delete complete');
+        res.status(200).send({ message : '성공했습니다' });
+    });
+});
