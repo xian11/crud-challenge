@@ -24,14 +24,21 @@ app.get('/', function(req,res){
 });
 
 app.get('/write', function(req,res){
-    res.sendFile(__dirname + '/write.ejs')
+    res.sendFile(__dirname + '/write.html')
 });
 
-
 app.post('/add', function(req,res){
-    db.collection('post').insertOne({ 제목 : req.body.title, 내용 : req.body.content},(err, result) => {
-        res.send('저장이 완료되었습니다')
-    })
+    db.collection('counter').findOne({ name : 'post_count' }, function(err,result){
+        
+        let total_post = result.totalPost;
+        db.collection('post').insertOne({ _id : total_post + 1, 제목 : req.body.title, 내용 : req.body.content},(err, result) => {
+            res.send('저장이 완료되었습니다');
+            db.collection('counter').updateOne({ name : "post_count" },{ $inc : {totalPost:1} }, function(err,result){
+                if(err) return console.log(err);
+            })
+        });
+
+    });
 });
 
 app.get('/list', function(req,res){
