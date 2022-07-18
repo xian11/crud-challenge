@@ -59,3 +59,11 @@ MongoClient.connect('mongodb+srv://bohyun:chlqhbo3278@boilerplate.kfozn.mongodb.
 !, html:5,  or
 bootstrap starter template
 ```
+
+- ejs
+
+```
+npm install ejs
+app.set('view engine', 'ejs');
+!@#$%.ejs 로 이름바꾸기 후 'views'폴더 안으로
+```
