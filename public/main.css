@@ -6,4 +6,5 @@
 }
 * {
     font-family: 'IBMPlexSansKR-Regular';
+    display: flexbox;
 }
