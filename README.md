@@ -93,3 +93,25 @@ npm install ejs
 app.set('view engine', 'ejs');
 !@#$%.ejs 로 이름바꾸기 후 'views'폴더 안으로
 ```
+
+- 환경변수 관리
+
+```
+npm install dotenv
+require('dotenv').config()
+.env 파일생성 후 환경변수 모두 옮기기
+```
+
+-router 관리하기
+
+```
+새로운폴더 만들고
+
+var router = require('express').Router();
+이안에 코드를 넣기
+router.get('/shop/shirts'...처럼 router로 시작
+module.exports = router;
+
+원래 코드쓰던 파일에 아래 미들웨어
+app.use('/',require('./routes/----.js'))
+```

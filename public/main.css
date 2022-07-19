@@ -8,3 +8,8 @@
     font-family: 'IBMPlexSansKR-Regular';
     display: flexbox;
 }
+
+#wrapper {
+    width:300px;
+    margin:auto;
+}

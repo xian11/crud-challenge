@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+require('dotenv').config()
 
 app.use(express.urlencoded({extended: true})) 
 
@@ -12,12 +13,12 @@ app.set('view engine', 'ejs');
 app.use('/public', express.static('public'));
 
 var db;
-MongoClient.connect('mongodb+srv://bohyun:chlqhbo3278@boilerplate.kfozn.mongodb.net/?retryWrites=true&w=majority', function(에러, client){
+MongoClient.connect(process.env.DB_URL, function(에러, client){
     if (에러) return console.log(에러);
 
     db = client.db('server');
 
-    app.listen('8080', function(){
+    app.listen(process.env.PORT, function(){
       console.log('listening on 8080')
     });
   });
@@ -66,7 +67,7 @@ app.get('/detail/:id', function(req,res){
             } else {
                 res.render('edit.ejs', { post : result });
             }
-        res.render('detail.ejs', { data : result });
+        // res.render('detail.ejs', { data : result });
     });
 });
 
@@ -118,6 +119,18 @@ app.post('/login',passport.authenticate('local',{
     res.redirect('/');
 });
 
+function checkLogin(req,res,next){
+    if (req.user) {
+        next();
+    } else {
+        res.send("<script>alert('로그인하지 않은 사용자입니다.');location.href='/login';</script>");
+    };
+};
+
+app.get('/mypage', checkLogin, function(req,res){
+        res.render('mypage.ejs', { user : req.user }); //user:그냥지은거고 req.user를ejs에보내준다
+});
+
 passport.use(new LocalStrategy({
     usernameField: 'id',
     passwordField: 'pw',
@@ -137,11 +150,31 @@ passport.use(new LocalStrategy({
     })
   }));
 
+
 // 세션저장
 passport.serializeUser(function (user, done) {
     done(null, user.id)
 });
 
 passport.deserializeUser(function (아이디, done) {
-    done(null, {})
+    db.collection('login').findOne({id:아이디},function(err,result){
+        done(null, result);
+    });
 }); 
+
+app.get('/signup', function(req,res){
+    res.render('signup.ejs');
+});
+
+app.post('/makeaccount', function(req,res){
+    db.collection('login').insertOne({ 
+        이름 : req.body.name,
+        id : req.body.id,
+        pw : req.body.pw,
+        time : new Date(),
+        생일 : req.body.birthday
+    }, function(err,result){
+        res.send("<script>alert('가입이 완료되었습니다. 로그인해주세요');location.href='/login';</script>");
+
+    });
+});
