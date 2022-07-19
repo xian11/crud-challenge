@@ -51,6 +51,16 @@ MongoClient.connect('mongodb+srv://bohyun:chlqhbo3278@boilerplate.kfozn.mongodb.
   })
 ```
 
+- html에서 put/delete 요청하려면
+
+```
+npm install method-override
+const methodOverride = require('method-override');
+app.use(methodOverride('_method'));
+
+<form action="/add?_method=PUT" method="POST">
+```
+
 ---
 
 - html 초기설정

@@ -18,20 +18,27 @@
 
     <link rel="stylesheet" href="/public/main.css" />
 
-    <title>write</title>
+    <title>EDIT</title>
   </head>
   <body>
     <%- include('nav.html') %>
 
-    <form class="m-5" action="/add" method="POST">
+    <form class="m-5" action="/edit?_method=PUT" method="POST">
       <div class="form-group">
         <label for="formGroupExampleInput">제목</label>
+        <input
+          type="text"
+          value="<%= post._id %>"
+          name="id"
+          style="display: none"
+        />
         <input
           name="title"
           type="text"
           class="form-control"
           id="formGroupExampleInput"
           placeholder="제목을 입력하세요"
+          value="<%= post.제목 %>"
         />
       </div>
       <div class="form-group">
@@ -42,10 +49,15 @@
           class="form-control"
           id="formGroupExampleInput2"
           placeholder="내용을 입력하세요"
+          value="<%= post.내용 %>"
         />
       </div>
       <button type="submit" class="btn btn-primary">저장</button>
-      <button type="button" class="btn btn-danger" onclick="location.href='/'">
+      <button
+        type="button"
+        class="btn btn-danger"
+        onclick="location.href='/list'"
+      >
         취소
       </button>
     </form>
