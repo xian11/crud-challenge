@@ -64,8 +64,20 @@ app.get('/list', function(req,res){
 });
 
 app.get('/search', function(req,res){
-    // console.log(req.query.value)  //검색한결과 찾기
-    db.collection('post').find({제목 : req.query.value}).toArray((err,result)=>{
+    var searchConst = [
+        {
+            $search: {
+                index: 'searchTitle',
+                text: {
+                query: req.query.value,
+                path: '제목'  // 제목날짜 둘다 찾고 싶으면 ['제목', '날짜']
+                }
+            }
+        },
+        { $sort : { _id : 1 } },
+        { $limit : 10 }
+    ]
+    db.collection('post').aggregate(searchConst).toArray((err,result)=>{
         res.render('search.ejs', {posts : result})
     })
 });

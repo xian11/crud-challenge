@@ -38,15 +38,7 @@
         <li class="list-group-item">
           <p>번호 : <%= posts[i]._id  %> </p>
           <a href="/detail/<%= posts[i]._id %>">제목 : <%= posts[i].제목 %></a>
-          <!-- <p>내용 : <%= posts[i].내용 %></p> -->
-          <!-- <button class="delete btn btn-danger " style="float: right;" data-id="<%= posts[i]._id %>">삭제</button> -->
-          <button
-          class="delete btn btn-outline-danger"
-          style="float: right"
-          data-id="<%= posts[i]._id %>"
-        >
-          삭제
-        </button>
+          <p>내용 : <%= posts[i].내용 %></p>
         </li>
         <% } %>
       </ul>

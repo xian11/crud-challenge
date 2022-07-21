@@ -32,6 +32,7 @@
     <div class="container input-group mb-2">
       <input class="form-control" id="search-input" >
       <button class="input-group-append btn btn-danger" id="search">검색</button>
+      <button class="input-group-append btn btn-info " onclick="location.href='/write'">글쓰기</button>
     </div>
       <ul class="list-group">
         <% for (var i = 0; i < posts.length; i++){ %>
@@ -49,8 +50,8 @@
         </button>
         </li>
         <% } %>
+      </div> 
       </ul>
-    </div> <button class="input-group-append btn btn-danger" onclick="location.href='/write'">글쓰기</button>
 
   </body>  
 </body>

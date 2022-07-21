@@ -10,6 +10,13 @@ codingapple
 
 ## 강의 정리
 
+- 검색 기능
+
+  - normal) mongodb > indexes > create index >
+    find({$text : { $search: req.query.value }})
+
+  - 한국어친화적인덱스) search indexes > create > refine language > lucene.korean 선택
+
 ### 초기설정
 
 - express 라이브러리 설치
