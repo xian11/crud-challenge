@@ -22,8 +22,11 @@
   </head>
   <body>
     <%- include('nav.html') %>
-
-    <p><%= user.이름 %>의 마이페이지입니다</p>
+    <div class="mypage">
+      <h2><%= user.이름 %>의 마이페이지입니다</h2>
+      <p>id: <%= user.id %></p>
+      <p>pw: <%= user.pw %></p>
+      <p>bd: <%= user.생일 %></p>
 
     <!-- Optional JavaScript; choose one of the two! -->
 

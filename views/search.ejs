@@ -53,34 +53,7 @@
     </div> <button class="input-group-append btn btn-danger" onclick="location.href='/write'">글쓰기</button>
 
   </body>  
-</body>
 
-  <script src="https://code.jquery.com/jquery-latest.min.js"></script>
-      
-  <script>
-
-    $('.delete').click(function(e){
-      var post_num = e.target.dataset.id;
-      var point = $(this);
-
-      $.ajax({
-        method: 'DELETE',
-        url: '/delete',
-        data: {_id : post_num}
-      }).done(function(result){
-        console.log('삭제성공');
-        point.parent('li').fadeOut();
-
-      }).fail(function(xhr, textStatus, errorThrown){
-        console.log(xhr, textStatus, errorThrown);
-      });
-    })
-
-    $('#search').click(function(){
-        var inputValue = $('#search-input').val();
-        window.location.replace('/search?value='+ inputValue); // ('/--')로 url변경.페이지이동도됨
-      })
-    
   </script>
 
     <script

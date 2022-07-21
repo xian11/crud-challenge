@@ -9,7 +9,13 @@
     display: flexbox;
 }
 
-#wrapper {
+.wrapper {
     width:300px;
     margin:auto;
+}
+
+.mypage {
+    width:fit-content;
+    margin: auto;
+    margin-top: 100px;
 }

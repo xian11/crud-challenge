@@ -36,8 +36,19 @@ app.post('/add', function(req,res){
     db.collection('counter').findOne({ name : 'post_count' }, function(err,result){
         
         let total_post = result.totalPost;
-        db.collection('post').insertOne({ _id : total_post + 1, 제목 : req.body.title, 내용 : req.body.content},(err, result) => {
-            res.send('저장이 완료되었습니다');
+        var month = new Date().getMonth()
+        var day = new Date().getDay()
+        var date = new Date().getDate()
+        var hour = new Date().getHours()
+        var minutes = new Date().getMinutes()
+
+        db.collection('post').insertOne({
+            _id : total_post + 1, 
+            제목 : req.body.title, 
+            내용 : req.body.content,
+            작성시간 : month+1 +"/ " + date + " ("+day+") "+ hour +":"+ minutes
+            },(err, result) => {
+            res.send("<script>alert('게시글이 작성되었습니다.');location.href='/list';</script>");
             db.collection('counter').updateOne({ name : "post_count" },{ $inc : {totalPost:1} }, function(err,result){
                 if(err) return console.log(err);
             });
@@ -52,6 +63,13 @@ app.get('/list', function(req,res){
     });
 });
 
+app.get('/search', function(req,res){
+    // console.log(req.query.value)  //검색한결과 찾기
+    db.collection('post').find({제목 : req.query.value}).toArray((err,result)=>{
+        res.render('search.ejs', {posts : result})
+    })
+});
+
 app.delete('/delete', function(req,res){
     req.body._id = parseInt(req.body._id);
     db.collection('post').deleteOne(req.body, function(err,result){
@@ -60,12 +78,13 @@ app.delete('/delete', function(req,res){
     });
 });
 
+
 app.get('/detail/:id', function(req,res){
     db.collection('post').findOne({_id : parseInt(req.params.id)}, function(err,result){
             if (result == null) {
                 res.send('존재하지 않는 게시물입니다')
             } else {
-                res.render('edit.ejs', { post : result });
+                res.render('detail.ejs', { data : result });
             }
         // res.render('detail.ejs', { data : result });
     });
@@ -73,7 +92,6 @@ app.get('/detail/:id', function(req,res){
 
 app.get('/edit/:id', function(req,res){
         db.collection('post').findOne({_id : parseInt(req.params.id)}, function(err,result){
-
             if (result == null) {
                 res.send('존재하지 않는 게시물입니다')
             } else {
@@ -81,7 +99,6 @@ app.get('/edit/:id', function(req,res){
             }
             
         });
-
 });
 
 app.put('/edit', function(req,res){
@@ -178,3 +195,4 @@ app.post('/makeaccount', function(req,res){
 
     });
 });
+

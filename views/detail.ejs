@@ -27,18 +27,22 @@
       <div class="card" style="width: 100%">
         <div class="card-body">
           <h5 class="card-title"><%= data.제목 %></h5>
-          <h6 class="card-subtitle mb-2 text-muted">글쓴사람 | 날짜</h6>
+          <h6 class="card-subtitle mb-2 text-muted">글쓴사람 | <%= data.작성시간 %></h6>
           <p class="card-text"><%= data.내용 %></p>
-          <button class="btn btn-primary" onclick="location.href='/edit'">
+          <button
+            class="btn btn-primary"
+            onclick="location.href='/edit/<%= data._id %>'"
+          >
             수정
           </button>
-
           <button class="btn btn-danger" onclick="location.href='/list'">
             나가기
           </button>
+
         </div>
       </div>
     </div>
+
     <script
       src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
       integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
@@ -50,4 +54,6 @@
       crossorigin="anonymous"
     ></script>
   </body>
+</body>
+
 </html>
