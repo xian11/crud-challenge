@@ -32,31 +32,6 @@ app.get('/write', function(req,res){
     res.render('write.ejs')
 });
 
-app.post('/add', function(req,res){
-    db.collection('counter').findOne({ name : 'post_count' }, function(err,result){
-        
-        let total_post = result.totalPost;
-        var month = new Date().getMonth()
-        var day = new Date().getDay()
-        var date = new Date().getDate()
-        var hour = new Date().getHours()
-        var minutes = new Date().getMinutes()
-
-        db.collection('post').insertOne({
-            _id : total_post + 1, 
-            제목 : req.body.title, 
-            내용 : req.body.content,
-            작성시간 : month+1 +"/ " + date + " ("+day+") "+ hour +":"+ minutes
-            },(err, result) => {
-            res.send("<script>alert('게시글이 작성되었습니다.');location.href='/list';</script>");
-            db.collection('counter').updateOne({ name : "post_count" },{ $inc : {totalPost:1} }, function(err,result){
-                if(err) return console.log(err);
-            });
-        });
-
-    });
-});
-
 app.get('/list', function(req,res){
     db.collection('post').find().toArray(function(err,result){
         res.render('list.ejs', { posts : result });
@@ -81,15 +56,6 @@ app.get('/search', function(req,res){
         res.render('search.ejs', {posts : result})
     })
 });
-
-app.delete('/delete', function(req,res){
-    req.body._id = parseInt(req.body._id);
-    db.collection('post').deleteOne(req.body, function(err,result){
-        console.log('delete complete');
-        res.status(200).send({ message : '성공했습니다' });
-    });
-});
-
 
 app.get('/detail/:id', function(req,res){
     db.collection('post').findOne({_id : parseInt(req.params.id)}, function(err,result){
@@ -196,15 +162,73 @@ app.get('/signup', function(req,res){
 });
 
 app.post('/makeaccount', function(req,res){
+    const NAME = req.body.name;
+    const ID =  req.body.id;
+    const PW = req.body.pw;
+    const BD = req.body.birthday;
+
     db.collection('login').insertOne({ 
-        이름 : req.body.name,
-        id : req.body.id,
-        pw : req.body.pw,
+        이름 : NAME,
+        id : ID,
+        pw : PW,
         time : new Date(),
         생일 : req.body.birthday
     }, function(err,result){
-        res.send("<script>alert('가입이 완료되었습니다. 로그인해주세요');location.href='/login';</script>");
+        const checkEng = /[a-zA-Z]/
+        const checkNum = /[0-9]/
+        const checkSpc = /[~!@#\#$%<>^&*]/
+
+        const checkSpace = NAME==""||ID==""||PW==""||BD=="";
+
+        const checkID = checkEng.test(ID)&&checkNum.test(ID);
+        const checkPW = checkNum.test(PW)&&checkEng.test(PW)&&checkSpc.test(PW);
+        if(checkSpace){
+            res.send("<script>alert('입력하지 않은 항목이 있습니다.');location.href='/signup';</script>");
+        } else if(!(checkID)) {
+            res.send("<script>alert('단순한 아이디입니다.(8자 이상의 숫자와 영문으로 구성)');location.href='/signup';</script>");
+        } else if(!(checkPW)){
+            res.send("<script>alert('단순한 패스워드입니다.(8자 이상의 숫자와 영문,특수문자로 구성)');location.href='/signup';</script>");
+        }else{
+            res.send("<script>alert('가입이 완료되었습니다. 로그인해주세요');location.href='/login';</script>");
+        }
+    });
+});
+
+app.post('/add', function(req,res){
+    db.collection('counter').findOne({ name : 'post_count' }, function(err,result){
+        
+        let total_post = result.totalPost;
+        const month = new Date().getMonth()
+        const day = new Date().getDay()
+        const date = new Date().getDate()
+        const hour = new Date().getHours()
+        const minutes = new Date().getMinutes()
+
+        const insertPost = {
+
+            _id : total_post + 1, 
+            작성자ID : req.user._id,
+            작성자이름 : req.user.이름,
+            제목 : req.body.title, 
+            내용 : req.body.content,
+            작성시간 : month+1 +"/ " + date + " ("+day+") "+ hour +":"+ minutes
+        }
+        db.collection('post').insertOne(insertPost,(err, result) => {
+            res.send("<script>alert('게시글이 작성되었습니다.');location.href='/list';</script>");
+            db.collection('counter').updateOne({ name : "post_count" },{ $inc : {totalPost:1} }, function(err,result){
+                if(err) return console.log(err);
+            });
+        });
 
     });
 });
 
+app.delete('/delete', function(req,res){
+    req.body._id=parseInt(req.body._id)
+    var deleteConst = {_id : req.body._id, 작성자ID: req.user._id}
+    
+    db.collection('post').deleteOne(deleteConst, function(err,result){
+            console.log('delete complete');
+            res.status(200).send({ message : '성공했습니다' });
+    });
+});

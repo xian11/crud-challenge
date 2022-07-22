@@ -39,27 +39,29 @@
         <li class="list-group-item">
           <p>번호 : <%= posts[i]._id  %> </p>
           <a href="/detail/<%= posts[i]._id %>">제목 : <%= posts[i].제목 %></a>
+          <p>작성자 : <%= posts[i].작성자이름 %></p>
           <!-- <p>내용 : <%= posts[i].내용 %></p> -->
           <!-- <button class="delete btn btn-danger " style="float: right;" data-id="<%= posts[i]._id %>">삭제</button> -->
-          <button
-          class="delete btn btn-outline-danger"
-          style="float: right"
-          data-id="<%= posts[i]._id %>"
-        >
-          삭제
-        </button>
+
+            <button
+            class="delete btn btn-outline-danger"
+            style="float: right"
+            data-id="<%= posts[i]._id %>"
+            id="del"
+            
+            >삭제
+          </button>
         </li>
         <% } %>
       </div> 
       </ul>
 
-  </body>  
-</body>
-
+    </body>  
+  </body>
+  
   <script src="https://code.jquery.com/jquery-latest.min.js"></script>
-      
+  
   <script>
-
     $('.delete').click(function(e){
       var post_num = e.target.dataset.id;
       var point = $(this);
@@ -74,6 +76,7 @@
 
       }).fail(function(xhr, textStatus, errorThrown){
         console.log(xhr, textStatus, errorThrown);
+        // console.log('ss')
       });
     })
 
@@ -81,7 +84,7 @@
         var inputValue = $('#search-input').val();
         window.location.replace('/search?value='+ inputValue); // ('/--')로 url변경.페이지이동도됨
       })
-    
+
   </script>
 
     <script
