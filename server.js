@@ -232,3 +232,48 @@ app.delete('/delete', function(req,res){
             res.status(200).send({ message : '성공했습니다' });
     });
 });
+
+//image
+let multer = require('multer');
+var storage = multer.diskStorage({
+
+  destination : function(req, file, cb){
+    cb(null, './public/image')
+  },
+  filename : function(req, file, cb){
+    cb(null, file.originalname)
+  }, filefilter : function(req, file, cb){
+    var ext = path.extname(file.originalname);
+    if(ext !== '.png' && ext !== '.jpg' && ext !== '.jpeg') {
+        return callback(new Error('PNG, JPG만 업로드하세요'))
+    }
+    callback(null, true)
+}
+
+});
+
+var upload = multer({storage : storage});
+
+app.get('/upload',function(req,res){
+    res.render('upload.ejs');
+});
+
+app.post('/upload',upload.array('profile',3),function(req,res){
+    res.send('업로드완료');
+});
+
+function uploadFileAdded() {
+    var uploadFiles = document.getElementById("uploadFiles")
+    for (var i = 0; i < uploadFiles.files.length; i++) {
+        var file = uploadFiles.files[i];
+        // 비동기 파일 업로드를 시작한다.
+        var uploader = new Uploader(file);
+        uploader.startUpload();
+    }
+    // 폼을 리셋해서 uploadFiles에 출력된 선택 파일을 초기화시킨다.
+    document.getElementById("uploadForm").reset();
+}
+
+app.get('/image/:imageName',function(req,res){
+    res.sendFile(__dirname+'/public/image/' + req.params.imageName)
+});
